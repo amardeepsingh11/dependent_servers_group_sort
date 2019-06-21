@@ -24,11 +24,16 @@ class Graph:
 
     # function to add an edge to graph
     def addEdge(self, u, v):
+        """
+            Description TBD
+        """
         self.graph[u].append(v)
 
     # A recursive function used by topologicalSort
     def topologicalSortUtil(self, v, visited, stack):
-
+        """
+            Description TBD
+        """
         # Mark the current node as visited
         visited[v] = True
 
@@ -44,6 +49,9 @@ class Graph:
 
     # The function to do Topological Sort. It uses recursive
     def topologicalSort(self):
+        """
+            Description TBD
+        """
         # Mark all the vertices as not visited
         visited = [False]*self.V
         stack = []
@@ -70,6 +78,9 @@ class ServersInfo:
         V (int): This is where we store the number of vertices in a graph
     """
     def __init__(self):
+        """
+            Description TBD
+        """
         self.serversinfo = defaultdict(list) #dictionary containing adjacency List
         self.V = 0 #No. of servers, will be set during readCSV rows(= number of servers) are read
         self.undirected_graph = Graph() # graph information used for Group(ing) i.e. u - v
@@ -77,6 +88,9 @@ class ServersInfo:
 
     # To read the CSV file and initialize the member variables
     def readCSV(self, csvFileName):
+        """
+            Description TBD
+        """
         try:
             with open(csvFileName, mode='r') as csv_file:
                 csv_reader = csv.DictReader(csv_file)
@@ -109,6 +123,9 @@ class ServersInfo:
 
     # To add the server to default dict list
     def addServer(self, u, v):
+        """
+            Description TBD
+        """
         self.serversinfo[u].append(v)
         # add the key Group and Order to each dict list
         self.serversinfo[u][0].update(Group=0)
@@ -116,6 +133,9 @@ class ServersInfo:
 
     # To print Adjacency Matrix to verify on https://graphonline.ru/en/
     def printadjacencyMatrix(self):
+        """
+            Description TBD
+        """
         print(f'Adjacency Matrix to verify on https://graphonline.ru/en/')
         for row in self.serversinfo.values():
             #print('\n')
@@ -136,6 +156,9 @@ class ServersInfo:
 
     # To print values ServerName, Group and Order to the console
     def printServer(self):
+        """
+            Description TBD
+        """
         print(f'\nServerName,Group,Order')
         for list_item in self.serversinfo.values():
             if list_item[0]["ServerName"] == "ServerName":
@@ -145,6 +168,9 @@ class ServersInfo:
 
     # To set the value of a particular column corresponding to the list_of_servers
     def setServersColumnValue(self, list_of_servers, column, value):
+        """
+            Description TBD
+        """
         # parse each Group corresponding to the server in the list_of_servers
         for list_item in self.serversinfo.values():
             # check if ServerName is in the list_of_servers
@@ -163,6 +189,9 @@ class ServersInfo:
 
     # To validate servers
     def validateServers(self):
+        """
+            Description TBD
+        """
         list_of_servers = []
         list_of_reboot_dependency_servers = []
         for list_item in self.serversinfo.values():
@@ -208,6 +237,9 @@ class ServersInfo:
 
     # To group the servers using BFS and Order using topological sort
     def groupServerBFSandTopoSort(self):
+        """
+            Description TBD
+        """
         # create the graph data
         for list_item in self.serversinfo.values():
             # continue with the first row assuming it's header
@@ -279,6 +311,9 @@ class ServersInfo:
 
     # Creates a graph with a root node, basically it returns the member of a group
     def bfs(self, graph, root):
+        """
+            Description TBD
+        """
         #visited, queue = set(), collections.deque([root])
         visited, queue = list(), collections.deque([root])
         #visited.add(root)

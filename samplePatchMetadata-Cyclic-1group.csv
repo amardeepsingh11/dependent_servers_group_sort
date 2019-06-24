@@ -1,0 +1,4 @@
+ServerName,MaintWindow,PreRebootTask,PostRebootTask,RebootDependency,VMSnapshot,VMSnapshotRemoval,BlackoutWindow,Credential,CustomerID
+Server1,MW01,,,Server3,,,,cred01,sag-test-01
+Server2,MW01,,,Server1,,,,cred01,sag-test-01
+Server3,MW01,,,Server2,,,,cred01,sag-test-01

@@ -4,6 +4,7 @@
 import csv
 from collections import defaultdict
 import collections
+import json
 
 #Class to represent a graph
 # https://www.geeksforgeeks.org/topological-sorting/
@@ -67,6 +68,43 @@ class Graph:
         # Print contents of the stack
         #print (stack)
         return stack
+
+    def isCyclicUtil(self, v, visited, recStack):
+        """
+            Description A recursive function used by isCyclic
+        """
+        # Mark current node as visited and
+        # adds to recursion stack
+        visited[v] = True
+        recStack[v] = True
+
+        # Recur for all neighbours
+        # if any neighbour is visited and in
+        # recStack then graph is cyclic
+        for neighbour in self.graph[v]:
+            if not visited[neighbour]:
+                if self.isCyclicUtil(neighbour, visited, recStack):
+                    return True
+            elif recStack[neighbour]:
+                return True
+
+        # The node needs to be poped from
+        # recursion stack before function ends
+        recStack[v] = False
+        return False
+
+    # Returns true if graph is cyclic else false
+    def isCyclic(self):
+        """
+        Description Returns true if graph is cyclic else false
+        """
+        visited = [False] * self.V
+        recStack = [False] * self.V
+        for node in range(self.V):
+            if not visited[node]:
+                if self.isCyclicUtil(node, visited, recStack):
+                    return True
+        return False
 
 #Class to represent a server
 class ServersInfo:
@@ -150,9 +188,7 @@ class ServersInfo:
                 else:
                     list_adjacency.append(0)
             print(f'{list_adjacency}')
-            #print each item
-            #print(f'list_item - {list_item}')
-            #print(f'{list_item[0]["ServerName"]}, Group - {list_item[0]["Group"]}' )
+        return True
 
     # To print values ServerName, Group and Order to the console
     def printServer(self):
@@ -164,6 +200,23 @@ class ServersInfo:
             if list_item[0]["ServerName"] == "ServerName":
                 continue
             print(f'{list_item[0]["ServerName"]},{list_item[0]["Group"]},{list_item[0]["Order"]}')
+        return True
+
+    # To write to a JSON file
+    def writeToJson(self, jsonFile):
+        """
+            Description TBD
+        """
+        #print(f'{self.serversinfo}')
+        with open(jsonFile, 'w') as fout:
+            for list_item in self.serversinfo.values():
+                if list_item[0]["ServerName"] == "ServerName":
+                    continue
+                #print(f'{list_item[0]}')
+                item = {list_item[0]["Group"]: dict(list_item[0])}
+                #print(f'item - {item}')
+                json.dump(item, fout)
+
         return True
 
     # To set the value of a particular column corresponding to the list_of_servers
@@ -263,6 +316,8 @@ class ServersInfo:
 
         # send this directed graph to print on screen for validation
         self.printadjacencyMatrix()
+
+        # check for cycle with
         # call the BFS for each graph in the graph data
         #print(f'graph  edges - {self.graph}')
         group_count = 0
@@ -294,6 +349,12 @@ class ServersInfo:
                         #print(f'\ngroup-{group_count}, vertex-{vertex}, neighbour-{neighbour}')
                         # u -> v with u = vertex and v = neighbour and u always come before v
                         graph_for_topo_sort.addEdge(graph_vertices.index(vertex), graph_vertices.index(neighbour))
+
+                # Before calling topo sort check Acyclic graphs i.e 1 -> 2 -> 3 -> 1
+                if graph_for_topo_sort.isCyclic():
+                    print("Graph is cyclic, Check adjacency matrix on https://graphonline.ru/en/")
+                    return False
+
                 # call the topoligical sort function
                 list_order_graph = graph_for_topo_sort.topologicalSort()
                 print(f'Servers indexed order {list_order_graph}')
@@ -306,7 +367,7 @@ class ServersInfo:
                     server_order = server_order + 1
                     self.setServersColumnValue(graph_vertices[index_in_order_graph], "Order", server_order)
                 print(f'Order - {list_order_of_servers}')
-
+        print(f'total groups are {group_count}')
         return True
 
     # Creates a graph with a root node, basically it returns the member of a group
@@ -333,24 +394,31 @@ s = ServersInfo()
 
 # read the CSV and put values into the servers information object created above
 #if s.readCSV('C:\\Users\\amardeep.singh\\Documents\\Automated_Patching\\ServerDependencyList\\samplePatchMetadata-Complex.csv') != True:
-flag = s.readCSV('samplePatchMetadata-Complex.csv')
+csvFile = 'samplePatchMetadata-Simple.csv'
+#csvFile = 'samplePatchMetadata-Complex.csv'
+#csvFile = 'samplePatchMetadata-Cyclic-1group.csv'
+#csvFile = 'samplePatchMetadata-Cyclic-1group_in_Multiple_Groups.csv'
 
-if flag:
-    print('read CSV success')
-else:
+flag = s.readCSV(csvFile)
+
+if not flag:
     print('read CSV fail')
     exit()
 
 # do some initial validations on the data received from CSV
 flag = s.validateServers()
-if flag:
-    print('validateServers success')
-else:
+if not flag:
     print('validateServers fail')
     exit()
 
 # Group the serves using BFS and Order using topological sort
-s.groupServerBFSandTopoSort()
+flag = s.groupServerBFSandTopoSort()
+if not flag:
+    print('groupServerBFSandTopoSort fail')
+    exit()
+
+# writes to JSON file
+s.writeToJson(csvFile + '.json')
 
 # print values ServerName, Group and Order to the console
 s.printServer()

@@ -207,15 +207,17 @@ class ServersInfo:
         """
             Description TBD
         """
-        #print(f'{self.serversinfo}')
+        group_dict = {}
+        for list_item in self.serversinfo.values():
+            if list_item[0]["ServerName"] == "ServerName":
+                continue
+            group_string = "Group" + str(list_item[0]["Group"])
+            group_dict.setdefault(group_string, [])
+            group_dict[group_string].append(dict(list_item[0]))
+
         with open(jsonFile, 'w') as fout:
-            for list_item in self.serversinfo.values():
-                if list_item[0]["ServerName"] == "ServerName":
-                    continue
-                #print(f'{list_item[0]}')
-                item = {list_item[0]["Group"]: dict(list_item[0])}
-                #print(f'item - {item}')
-                json.dump(item, fout)
+            #json.dump(group_dict, fout)
+            json.dump(group_dict, fout, indent=4, separators=(',', ':'))
 
         return True
 
@@ -394,8 +396,9 @@ s = ServersInfo()
 
 # read the CSV and put values into the servers information object created above
 #if s.readCSV('C:\\Users\\amardeep.singh\\Documents\\Automated_Patching\\ServerDependencyList\\samplePatchMetadata-Complex.csv') != True:
-csvFile = 'samplePatchMetadata-Simple.csv'
+#csvFile = 'samplePatchMetadata-Simple.csv'
 #csvFile = 'samplePatchMetadata-Complex.csv'
+csvFile = 'samplePatchMetadata-Complex-MultipleGroups.csv'
 #csvFile = 'samplePatchMetadata-Cyclic-1group.csv'
 #csvFile = 'samplePatchMetadata-Cyclic-1group_in_Multiple_Groups.csv'
 

@@ -1,5 +1,7 @@
+"""
+    The module is for sorting the servers information contained in a CSV
+"""
 from dependent_servers_group_sort import ServersInfo
-
 
 # Program execution starting point
 # create an object that contains servers information

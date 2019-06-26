@@ -9,11 +9,11 @@ s = ServersInfo()
 
 # read the CSV and put values into the servers information object created above
 #if s.readCSV('C:\\Users\\amardeep.singh\\Documents\\Automated_Patching\\ServerDependencyList\\samplePatchMetadata-Complex.csv') != True:
-#csvFile = 'sample_inputs\\samplePatchMetadata-Simple.csv'
-#csvFile = 'sample_inputs\\samplePatchMetadata-Complex.csv'
-csvFile = 'sample_inputs\\samplePatchMetadata-Complex-MultipleGroups.csv'
-#csvFile = 'sample_inputs\\samplePatchMetadata-Cyclic-1group.csv'
-#csvFile = 'sample_inputs\\samplePatchMetadata-Cyclic-1group_in_Multiple_Groups.csv'
+#csvFile = 'dependent_servers_group_sort\\sample_inputs\\samplePatchMetadata-Simple.csv'
+#csvFile = 'dependent_servers_group_sort\\sample_inputs\\samplePatchMetadata-Complex.csv'
+csvFile = 'dependent_servers_group_sort\\sample_inputs\\samplePatchMetadata-Complex-MultipleGroups.csv'
+#csvFile = 'dependent_servers_group_sort\\sample_inputs\\samplePatchMetadata-Cyclic-1group.csv'
+#csvFile = 'dependent_servers_group_sort\\sample_inputs\\samplePatchMetadata-Cyclic-1group_in_Multiple_Groups.csv'
 
 flag = s.readCSV(csvFile)
 
